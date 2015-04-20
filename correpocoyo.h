@@ -160,6 +160,7 @@ CorrePocoyo<T>::CorrePocoyo()
 		primero = NULL;
 		ultimo = NULL;
 		tam = 0;
+		cam = NULL;
 }
 
 template <typename T>
@@ -168,7 +169,9 @@ CorrePocoyo<T>::~CorrePocoyo(){
 		Nodo* temp = primero->sig;
 		delete primero;
 		primero = temp;
+		
 	}
+	delete cam;
 }
 
 
@@ -177,11 +180,15 @@ void CorrePocoyo<T>::nuevoCorredor(const T& nuevo) {
 		Nodo* temp = new Nodo;
 		temp->sig = NULL;
 		temp->prev = ultimo;
-		temp->elem = nuevo;
+		temp->elem = nuevo;		
+		if (ultimo == NULL){
+		primero = temp;
+		}
+		else{
 		ultimo->sig = temp;
-		ultimo = temp;
+		}
+		ultimo = temp;		
 		tam++;
-		if (tam == 1) primero = temp;
 }
 
 //Notar que esta función se puede mejorar aprovechando que la 
@@ -198,15 +205,42 @@ const T& CorrePocoyo<T>::dameCorredorEnPos(int n) const {
 }
 
 template<typename T>
+bool CorrePocoyo<T>::esVacia() const{
+	return tam==0;
+}
+
+template<typename T>
+int CorrePocoyo<T>::tamanio() const{
+	return tam;	
+}
+
+template<typename T>
+int CorrePocoyo<T>::damePosicion(const T& cosa) const{	
+int i = 0;	
+Nodo* buscador = primero;
+while (buscador != NULL){
+		i = i + 1;	
+		if (buscador->elem == cosa){
+			return i; 		
+			}		
+		else{
+			buscador = buscador->sig;
+			}
+}
+return 42;	
+}
+
+template<typename T>
 ostream& CorrePocoyo<T>::mostrarCorrePocoyo(ostream& out) const{
 	out << "[";
 	int i = 1;
 	for(int i = 1; i <= tam; i++) {
 		out << dameCorredorEnPos(i);
-		if(i < tam) 
-			out << ",";
-		out << "]";
-	}
+		if(i < tam) out << ",";
+		}
+			
+	out << "]";
+	
 	return out;
 }
 
