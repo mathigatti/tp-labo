@@ -99,9 +99,6 @@ class CorrePocoyo{
 	 */
 	const T& dameCorredorEnPos(int) const;	
 
-
-
-
 	/*
 	 * Dice si la CorrePocoyo tiene o no corredores.
 	 */
@@ -126,8 +123,6 @@ class CorrePocoyo{
 	
 	
   private:
-	Nodo* prim;
-	Nodo* cam;
 	/*
 	 * No se puede modificar esta funcion.
 	 */
@@ -142,10 +137,14 @@ class CorrePocoyo{
 	struct Nodo {
 		T elem;
 		Nodo* prev;
-		Nodo* sig;		
+		Nodo* sig;
+		Nodo* cam;	
 		
 	};
-
+	
+	Nodo* primero;
+	Nodo* ultimo;
+	int tam;
 };
 
 template<class T>
@@ -155,31 +154,57 @@ ostream& operator<<(ostream& out, const CorrePocoyo<T>& a) {
 
 // Implementación a hacer por los alumnos.
 template <typename T>
-
-CorrePocoyo::CorrePocoyo()
+CorrePocoyo<T>::CorrePocoyo()
 {
-		prim = null;
+		primero = NULL;
+		ultimo = NULL;
+		tam = 0;
 }
-void CorrePocoyo::nuevoCorredor(const T&)
-{
-		Nodo *nodo = new Nodo;
-		nodo.sig = null;
-		nodo.prev = null;
-		nodo.elem = T;
-		if (prim = null) 
-			{
-			 prim = nodo;
-			} 
-		else 
-			{
-			Nodo *ulti = prim;
-			while (ulti.sig != null)
-				{
-				ulti = ulti.sig;
-			    }
-			ulti.sig = nodo;
-			nodo.prev = ulti
-			}	
+
+template <typename T>
+CorrePocoyo<T>::~CorrePocoyo(){
+	while(primero != NULL) {
+		Nodo* temp = primero->sig;
+		delete primero;
+		primero = temp;
+	}
+}
+
+template <typename T>
+void CorrePocoyo<T>::nuevoCorredor(const T& nuevo) {
+		Nodo* temp = new Nodo;
+		temp->sig = NULL;
+		temp->prev = ultimo;
+		temp->elem = nuevo;
+		temp->cam = NULL;
+		ultimo->sig = temp;
+		ultimo = temp;
+		tam++;
+		if (tam == 1) primero = temp;
+}
+
+//Notar que esta función se puede mejorar aprovechando que la 
+//lista es doblemente enlazada
+template<typename T>
+const T& CorrePocoyo<T>::dameCorredorEnPos(int n) const {
+	Nodo* buscador = primero;
+	for(int i = 1; i < n; i++) {
+		buscador = buscador->sig;
+	}
+	return buscador->elem;
+}
+
+template<typename T>
+ostream& CorrePocoyo<T>::mostrarCorrePocoyo(ostream& out) const{
+	out << "[";
+	int i = 1;
+	for(int i = 1; i <= tam; i++) {
+		out << dameCorredorEnPos(i);
+		if(i < tam) 
+			out << ",";
+		out << "]";
+	}
+	return out;
 }
 
 #endif //CORREPOCOYO_H_

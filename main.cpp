@@ -1,9 +1,11 @@
-# include < iostream >
-# include " correpocoyo.h "
-using namespace std ;
-int main ( int argc , char * argv [])
-{
-CorrePocoyo carrera ;
-cout <<  carrera.nuevoCorredor(const int& 3) << endl ;
-return 0;
+# include <iostream>
+# include "correpocoyo.h"
+
+using namespace std;
+
+int main () {
+	CorrePocoyo<int> carrera;
+	carrera.nuevoCorredor(8);
+	cout << carrera.dameCorredorEnPos(1);
+	return 0;
 }
