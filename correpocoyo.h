@@ -231,6 +231,23 @@ return 42;
 }
 
 template<typename T>
+const T& CorrePocoyo<T>::damePrimero() const {
+	return primero->elem;
+}
+
+template<typename T>
+bool CorrePocoyo<T>::operator==(const CorrePocoyo<T>& otro) const {
+	bool esIgual = true;
+	if(tamanio() != otro.tamanio()){
+		return false;
+	}else{
+		int i = 1;
+		while(i == tam && dameCorredorEnPos(i) == otro.dameCorredorEnPos(i)) i++;
+		return i == tam;
+	}
+}
+
+template<typename T>
 ostream& CorrePocoyo<T>::mostrarCorrePocoyo(ostream& out) const{
 	out << "[";
 	int i = 1;
