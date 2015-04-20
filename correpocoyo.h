@@ -34,6 +34,7 @@ class CorrePocoyo{
 	 * Agrega un nuevo corredor al CorrePocoyo. Lo agregará al final 
 	 */
 	void nuevoCorredor(const T&);
+
 				
 					
 	/*
@@ -138,10 +139,10 @@ class CorrePocoyo{
 		T elem;
 		Nodo* prev;
 		Nodo* sig;
-		Nodo* cam;	
+		
 		
 	};
-	
+	Nodo* cam;
 	Nodo* primero;
 	Nodo* ultimo;
 	int tam;
@@ -170,13 +171,13 @@ CorrePocoyo<T>::~CorrePocoyo(){
 	}
 }
 
+
 template <typename T>
 void CorrePocoyo<T>::nuevoCorredor(const T& nuevo) {
 		Nodo* temp = new Nodo;
 		temp->sig = NULL;
 		temp->prev = ultimo;
 		temp->elem = nuevo;
-		temp->cam = NULL;
 		ultimo->sig = temp;
 		ultimo = temp;
 		tam++;
@@ -185,6 +186,8 @@ void CorrePocoyo<T>::nuevoCorredor(const T& nuevo) {
 
 //Notar que esta función se puede mejorar aprovechando que la 
 //lista es doblemente enlazada
+
+
 template<typename T>
 const T& CorrePocoyo<T>::dameCorredorEnPos(int n) const {
 	Nodo* buscador = primero;
