@@ -27,7 +27,7 @@ class CorrePocoyo{
 		
 	/*
 	 * Acordarse de liberar toda la memoria!
-	 */	 
+	 */	
 	~CorrePocoyo();
 
 	/*
@@ -216,18 +216,18 @@ int CorrePocoyo<T>::tamanio() const{
 
 template<typename T>
 int CorrePocoyo<T>::damePosicion(const T& cosa) const{	
-int i = 0;	
-Nodo* buscador = primero;
-while (buscador != NULL){
-		i = i + 1;	
-		if (buscador->elem == cosa){
-			return i; 		
+	int i = 0;	
+	Nodo* buscador = primero;
+	while (buscador != NULL){
+			i = i + 1;	
+			if (buscador->elem == cosa){
+				return i; 		
 			}		
-		else{
-			buscador = buscador->sig;
+			else{
+				buscador = buscador->sig;
 			}
-}
-return 42;	
+	}
+	return 42;	
 }
 
 template<typename T>
@@ -237,12 +237,11 @@ const T& CorrePocoyo<T>::damePrimero() const {
 
 template<typename T>
 bool CorrePocoyo<T>::operator==(const CorrePocoyo<T>& otro) const {
-	bool esIgual = true;
 	if(tamanio() != otro.tamanio()){
 		return false;
 	}else{
 		int i = 1;
-		while(i == tam && dameCorredorEnPos(i) == otro.dameCorredorEnPos(i)) i++;
+		while(i < tam && dameCorredorEnPos(i) == otro.dameCorredorEnPos(i)) i++;
 		return i == tam;
 	}
 }
@@ -254,7 +253,7 @@ ostream& CorrePocoyo<T>::mostrarCorrePocoyo(ostream& out) const{
 	for(int i = 1; i <= tam; i++) {
 		out << dameCorredorEnPos(i);
 		if(i < tam) out << ",";
-		}
+	}
 			
 	out << "]";
 	
