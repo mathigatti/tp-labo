@@ -1,4 +1,5 @@
 # include <iostream>
+#include <string>
 # include "correpocoyo.h"
 
 using namespace std;
@@ -17,12 +18,19 @@ int main () {
 	carrera2.nuevoCorredor(999);
 	cout << carrera2 << endl;
 	
-	CorrePocoyo<int> carrera3;
-	carrera3.nuevoCorredor(666);
-	carrera3.nuevoCorredor(999);
-	cout << carrera3 << endl;
+	CorrePocoyo<int> carrera3 = CorrePocoyo<int>(carrera2);
+		
+	CorrePocoyo<string> carrera4;
+	carrera4.nuevoCorredor("Roberto");
+	carrera4.nuevoCorredor("Fulanito");
+	cout << carrera4 << endl;
 	
 	cout << "La carrera 1 es igual a la 2?: " << (carrera == carrera2) << endl;
+	cout << "La carrera 2 es igual a la 3?: " << (carrera3 == carrera2) << endl;
+	cout << "Primer corredor de la carrera 3: " << carrera3.damePrimero() << endl;
+	cout << "Posición de Fulanito: " << carrera4.damePosicion("Fulanito") << endl;
+	
+	carrera2.nuevoCorredor(555);
 	cout << "La carrera 2 es igual a la 3?: " << (carrera3 == carrera2) << endl;
 	
 	return 0;

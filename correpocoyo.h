@@ -35,8 +35,6 @@ class CorrePocoyo{
 	 */
 	void nuevoCorredor(const T&);
 
-				
-					
 	/*
 	 * Agrega un nuevo corredor al CorrePocoyo. El primer T es el corredor a agregar y lo hace delante del segundo
 	 *
@@ -164,6 +162,20 @@ CorrePocoyo<T>::CorrePocoyo()
 }
 
 template <typename T>
+CorrePocoyo<T>::CorrePocoyo(const CorrePocoyo<T>& aCopiar){
+	primero = NULL;
+	ultimo = NULL;
+	tam = 0;
+	//Hay un tema con ver como hacemos para que la camara apunte al mismo 
+	//que apuntaba en aCopiar
+	cam = NULL;
+	
+	for(int i = 1; i <= aCopiar.tamanio(); i++){
+		nuevoCorredor(aCopiar.dameCorredorEnPos(i));
+	}
+}
+
+template <typename T>
 CorrePocoyo<T>::~CorrePocoyo(){
 	while(primero != NULL) {
 		Nodo* temp = primero->sig;
@@ -174,14 +186,13 @@ CorrePocoyo<T>::~CorrePocoyo(){
 	delete cam;
 }
 
-
 template <typename T>
 void CorrePocoyo<T>::nuevoCorredor(const T& nuevo) {
 		Nodo* temp = new Nodo;
 		temp->sig = NULL;
 		temp->prev = ultimo;
 		temp->elem = nuevo;		
-		if (ultimo == NULL){
+		if (tam == 0){
 		primero = temp;
 		}
 		else{
@@ -191,17 +202,21 @@ void CorrePocoyo<T>::nuevoCorredor(const T& nuevo) {
 		tam++;
 }
 
-//Notar que esta función se puede mejorar aprovechando que la 
-//lista es doblemente enlazada
-
-
 template<typename T>
 const T& CorrePocoyo<T>::dameCorredorEnPos(int n) const {
-	Nodo* buscador = primero;
-	for(int i = 1; i < n; i++) {
-		buscador = buscador->sig;
+	if(n <= (tam/2)){
+		Nodo* buscador = primero;
+		for(int i = 1; i < n; i++) {
+			buscador = buscador->sig;
+		}
+		return buscador->elem;
+	}else{
+		Nodo* buscador = ultimo;
+		for(int i = tam; i > n; i--) {
+			buscador = buscador->prev;
+		}
+		return buscador->elem;
 	}
-	return buscador->elem;
 }
 
 template<typename T>
@@ -233,6 +248,16 @@ int CorrePocoyo<T>::damePosicion(const T& cosa) const{
 template<typename T>
 const T& CorrePocoyo<T>::damePrimero() const {
 	return primero->elem;
+}
+
+template<typename T>
+void CorrePocoyo<T>::filmarProxPerdedor(){
+	if(cam->sig != NULL) cam = cam->sig;
+}
+
+template<typename T>
+void CorrePocoyo<T>::filmarProxExitoso(){
+	if(cam->prev != NULL) cam = cam->prev;
 }
 
 template<typename T>
