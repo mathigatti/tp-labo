@@ -166,12 +166,20 @@ CorrePocoyo<T>::CorrePocoyo(const CorrePocoyo<T>& aCopiar){
 	primero = NULL;
 	ultimo = NULL;
 	tam = 0;
-	//Hay un tema con ver como hacemos para que la camara apunte al mismo 
-	//que apuntaba en aCopiar
 	cam = NULL;
-	
+			
 	for(int i = 1; i <= aCopiar.tamanio(); i++){
 		nuevoCorredor(aCopiar.dameCorredorEnPos(i));
+	}
+	
+	if(!(aCopiar.esVacia())) {
+		int posCamara = damePosicion(aCopiar.corredorFilmado());
+		Nodo* temp = primero;
+		while(posCamara > 1) {
+			temp = temp->sig;
+			posCamara--;
+		}
+		cam = temp;
 	}
 }
 
@@ -193,10 +201,11 @@ void CorrePocoyo<T>::nuevoCorredor(const T& nuevo) {
 		temp->prev = ultimo;
 		temp->elem = nuevo;		
 		if (tam == 0){
-		primero = temp;
+			primero = temp;
+			cam = primero;
 		}
 		else{
-		ultimo->sig = temp;
+			ultimo->sig = temp;
 		}
 		ultimo = temp;		
 		tam++;
@@ -248,6 +257,11 @@ int CorrePocoyo<T>::damePosicion(const T& cosa) const{
 template<typename T>
 const T& CorrePocoyo<T>::damePrimero() const {
 	return primero->elem;
+}
+
+template<typename T>
+const T& CorrePocoyo<T>::corredorFilmado() const {
+	return (cam->elem);
 }
 
 template<typename T>
