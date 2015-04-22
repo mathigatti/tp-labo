@@ -185,13 +185,24 @@ CorrePocoyo<T>::CorrePocoyo(const CorrePocoyo<T>& aCopiar){
 
 template <typename T>
 CorrePocoyo<T>::~CorrePocoyo(){
-	while(primero != NULL) {
-		Nodo* temp = primero->sig;
-		delete primero;
-		primero = temp;
-		
+	if(tam == 0){
 	}
-	delete cam;
+	else if(tam == 1){
+		delete primero;
+	}else{
+		Nodo * temp = primero;
+		Nodo * temp_sig = temp->sig;
+		
+		
+	  while(temp->sig != NULL) {
+		    delete temp;
+		    temp = temp_sig;
+		    temp_sig = temp_sig->sig;
+		
+	  }
+	  delete temp;
+  }
+	
 }
 
 template <typename T>
@@ -223,52 +234,90 @@ void CorrePocoyo<T>::seCansa(const T& cansado) {
 }
 
 template <typename T>
-void CorrePocoyo<T>::sobrepasar(const T& pasalo){
-	int pos = damePosicion(pasalo);
+void CorrePocoyo<T>::sobrepasar(const T& pasador){
+	int pos = damePosicion(pasador);
 	int i = 1;
-	Nodo* temp = primero;
+	Nodo* rapido = primero;
 	while (i < pos){
-		temp = temp->sig;
+		rapido = rapido->sig;
 		i = i + 1;
 	} 
-	if (temp->sig != NULL){
-	(temp->sig)->prev = temp->prev;
-	(temp->prev)->sig = temp->sig;
+	Nodo* lento = rapido->prev;
+	
+	rapido->prev = lento->prev;
+	lento->sig = rapido->sig;
+	rapido->sig = lento;
+	lento->prev = rapido;
+	if(lento->sig == NULL){ // es el ultimo
+		ultimo =lento;
+	}else{
+		(lento->sig)->prev = lento;
+	}
+	if(rapido->prev == NULL){//Es el primero
+		primero = rapido;
+	}else{
+		(rapido->prev)->sig = rapido;
+	}
+	/*if (lento != primero){
+		(rapido->sig)->prev = rapido->prev;//guarda que rapido no sea ultimo
+		
+		
+		
+	}else{
+		rapido->prev = NULL;
+		rapido->sig = lento;
+		primero = rapido;
 	}
 	else{
-	ultimo = temp->prev;
-	(temp->prev)->sig = NULL;
+		ultimo = lento;
+		lento->sig = NULL;
 	}
-	if ((temp->prev)->prev = NULL){
-		primero = temp;
-		}
+	
+	if (lento->prev = NULL){
+		primero = rapido;
+	}
 	else{
-		(temp->prev)->prev = temp;
-		}
+		lento->prev = rapido;
+	}
 	
-	temp->prev = (temp->prev)->prev;
-	
+	lento = lento->prev;
+*/	
 	}
 
 template <typename T>
 void CorrePocoyo<T>::nuevoCorredor(const T& nuevo, const T& delante){
-	int pos = damePosicion(delante);
+	/*int pos = damePosicion(delante);
 	int i = 1;
 	Nodo* temp = primero;
 	while (i < pos){
 		temp = temp->sig;
 		i = i + 1;
-	}  
-	Nodo* pnuevo = new Nodo;
-	pnuevo->elem = nuevo;
-	pnuevo->prev = temp->prev;
-	pnuevo->sig = temp;
-	temp->prev = pnuevo;
+	}*/
 	
-	if (pnuevo->prev != NULL){
-		(pnuevo->prev)->sig = pnuevo;	
-	} else {
+	Nodo * temp = primero;
+	
+	while(temp->elem != delante){
+		temp = temp->sig;
+	}
+	
+	
+	Nodo* pnuevo = new Nodo; 
+	pnuevo->elem = T(nuevo);  
+	//pnuevo->prev = temp->prev;
+	//pnuevo->sig = temp;
+	//temp->prev = pnuevo;
+	
+	if (temp->prev != NULL){
+		(temp->prev)->sig = pnuevo;
+		pnuevo->prev = temp->prev;
+		temp->prev = pnuevo;
+		pnuevo->sig = temp;
+		//(pnuevo->prev)->sig = pnuevo;	
+	} else {//==NULL
+		temp->prev = pnuevo;
+		pnuevo->sig = temp;	
 		primero = pnuevo;
+		pnuevo->prev = NULL;
 	}
 	tam++;
 }
@@ -278,16 +327,16 @@ void CorrePocoyo<T>::nuevoCorredor(const T& nuevo) {
 		Nodo* temp = new Nodo;
 		temp->sig = NULL;
 		temp->prev = ultimo;
-		temp->elem = nuevo;		
+		temp->elem = T(nuevo);
 		if (primero == NULL){
 			primero = temp;
-			cam = primero;
+			cam = temp;
 		}
 		else{
 			ultimo->sig = temp;
 		}
 		ultimo = temp;		
-		tam++;
+		tam++; 
 }
 
 template<typename T>
@@ -321,7 +370,7 @@ template<typename T>
 int CorrePocoyo<T>::damePosicion(const T& cosa) const{	
 	int i = 1;	
 	Nodo* buscador = primero;
-	while (buscador != NULL && i <= tam){
+	while (buscador != NULL){
 			if (buscador->elem == cosa){
 				return i; 		
 			}		
@@ -368,10 +417,9 @@ bool CorrePocoyo<T>::operator==(const CorrePocoyo<T>& otro) const {
 template<typename T>
 ostream& CorrePocoyo<T>::mostrarCorrePocoyo(ostream& out) const{
 	out << "[";
-	int i = 1;
 	for(int i = 1; i <= tam; i++) {
 		out << dameCorredorEnPos(i);
-		if(i < tam) out << ",";
+		if(i < tam) out << ", ";
 	}
 			
 	out << "]";
