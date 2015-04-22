@@ -203,13 +203,16 @@ void CorrePocoyo<T>::seCansa(const T& cansado) {
 		temp = temp->sig;
 		i = i + 1;
 	} 
+	if (cam == temp)	{cam = NULL;}
 	if (temp->prev != NULL){
 		(temp->prev)->sig = temp->sig;
+		if (cam == temp)	{cam = temp->sig;}
 		} 
 	else { 
 		primero = temp->sig;
 	}
 	if (temp->sig != NULL){
+		if (cam == temp)	{cam = temp->prev;}
 		(temp->sig)->prev = temp->prev;
 		} 
 	else { 
@@ -276,7 +279,7 @@ void CorrePocoyo<T>::nuevoCorredor(const T& nuevo) {
 		temp->sig = NULL;
 		temp->prev = ultimo;
 		temp->elem = nuevo;		
-		if (tam == 0){
+		if (primero == NULL){
 			primero = temp;
 			cam = primero;
 		}
